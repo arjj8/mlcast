@@ -347,7 +347,29 @@ def forward(
 If your network uses a different parameter name for the input channel count
 than `input_channels` (the default assumed by `ConvGruModel` and the
 `set_variables` fiddler), set it explicitly on the config node.
+## New features
+### dynamic sampler
+An idea of having a dynamic pipeline, where functions for pre-processing the data, is being work on. The idea is as follows: depending of each ML model requirement the data needs to be modified somehow  e.g. filtering nan, normalizing, among other. Hence, a dynamic pipeline would it be useful, so it can adapt to the needs of the model. As it is now the pipeline includes two main classes/process: `Tiling_Sampler` and `BinNormSampler`. The first function is in charge of filtering nan values an save the tilings that have valuable data, the second one calculate the sampling/binning indices and build a sample based on the indices. Both classes were created by Gabriele Franch. In the `FuncVali.py` there is an example on how to run the pipeline:
+```python
+# from pipeline_core import Pipeline
+# import xarray as xr
+# import fiddle as fdl
 
+cfg = Pipeline() #here you could add a new process e.g. Pipeline(NewFunc(pars_of_new_fuction)) where NewFunc is a class and pars_of_new_fuction is a data class
+cfg.steps.pop(1) #This is telling to the pipeline to delete the second class, BinNormSampler, and it is an example on how to skip process when there are not needed.
+# in the following, multiple parameters are being change to fit the experiment that wants to be run
+cfg.steps[0].pars.start_date = '2021-07-01' #indicating what sample of the data wants to be used
+cfg.steps[0].pars.end_date = '2021-07-31'
+cfg.steps[0].pars.w = 256
+cfg.steps[0].pars.h = 256
+cfg.steps[0].pars.max_nan = 100000 # the threshold use for the tiling
+cfg.steps[0].pars.time_depth = 24
+
+pipeline = fdl.build(cfg) # build the experiment
+
+zarr_path = '/dmidata/projects/radar/products/composite/zarrComposite/products/DMI_500m_10min_v011.zarr'
+pipeline(zarr_path) # input the data and run the pre-porcessing
+```
 ## Contributing
 
 Please feel free to raise issues or PRs if you have any suggestions or questions.
