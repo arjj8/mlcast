@@ -68,6 +68,10 @@ optional-dependencies.dev = [
   "ruff>=0.8",
   "s3fs>=2024.2",
 ]
+optional-dependencies.gpu-cu126 = [
+  "torch>=2.7.1",
+  "torchvision>=0.20",
+]
 optional-dependencies.gpu-cu128 = [
   "torch>=2.7.1",
   "torchvision>=0.20",
@@ -122,6 +126,11 @@ exclude = [
 name = "testpypi"
 url = "https://test.pypi.org/simple/"
 publish-url = "https://test.pypi.org/legacy/"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
 explicit = true
 
 [[tool.uv.index]]
