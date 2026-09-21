@@ -66,7 +66,7 @@ def training_experiment() -> Experiment:
         SourceDataPrecomputedSamplingDataset,
         zarr_path="./data/radar.zarr",
         csv_path="./data/sampled_datacubes.csv",
-        standard_names=["rainfall_rate"],
+        standard_names=["rainfall_rate","dbz"],
         input_steps=6,
         forecast_steps=12,
         return_mask=True,
