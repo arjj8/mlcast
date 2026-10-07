@@ -164,6 +164,7 @@ class ReflectivityScaling:
     def normalization_registry(self) -> dict[str, Callable[[np.ndarray], np.ndarray]]:
         """Map CF standard names to the unnormalized → normalized conversion methods."""
         return {
+            "dbz": self.normalize_reflectivity,
             "rainfall_rate": self.rainfall_rate_to_normalized,
             "rainfall_flux": self.rainfall_flux_to_normalized,
             "rainfall_amount": self.rainfall_amount_5min_to_normalized,
@@ -173,6 +174,7 @@ class ReflectivityScaling:
     def denormalization_registry(self) -> dict[str, Callable[[np.ndarray], np.ndarray]]:
         """Map CF standard names to the normalized → unnormalized conversion methods."""
         return {
+            "dbz": self.denormalize_reflectivity,
             "rainfall_rate": self.normalized_to_rainfall_rate,
             "rainfall_flux": self.normalized_to_rainfall_flux,
             "rainfall_amount": self.normalized_to_rainfall_amount_5min,
